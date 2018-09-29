@@ -40,7 +40,7 @@ function startGame() {
   document.addEventListener('click', checkForWin);
   document.addEventListener('contextmenu', checkForWin);
   document.getElementById("reset").addEventListener('click', resetBoard);
-  board = createBoard(2);
+  board = createBoard(4);
 
   // This is a loop that looks in all of the cells objects,
   // calls the countSurroundingMines function
