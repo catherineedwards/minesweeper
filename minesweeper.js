@@ -39,8 +39,8 @@ function startGame() {
 
   document.addEventListener('click', checkForWin);
   document.addEventListener('contextmenu', checkForWin);
-  board = createBoard(5);
-
+  document.getElementById("reset").addEventListener('click', resetBoard);
+  board = createBoard(2);
 
   // This is a loop that looks in all of the cells objects,
   // calls the countSurroundingMines function
@@ -52,6 +52,7 @@ function startGame() {
     board.cells[i].surroundingMines = countSurroundingMines(board.cells[i]);
   }
   lib.initBoard()
+  gameStatus();
 }
 
 // Define this function to look for a win condition:
@@ -59,16 +60,13 @@ function startGame() {
 // 1. Are all of the cells that are NOT mines visible?
 // 2. Are all of the mines marked?
 function checkForWin() {
-
+  gameStatus();
 
   for (let i = 0; i < board.cells.length; i++) {
     if (board.cells[i].isMine == true && board.cells[i].isMarked == false) {
-
       return false
     };
   }
-
-
 
   for (let i = 0; i < board.cells.length; i++) {
     if (board.cells[i].hidden == true && board.cells[i].isMine == false) {
@@ -77,10 +75,12 @@ function checkForWin() {
   }
 
   lib.displayMessage('You win!')
+  gameStatus();
   return true
   // You can use this function call to declare a winner (once you've
   // detected that they've won, that is!)
   //   lib.displayMessage('You win!')
+  
 }
 
 // Define this function to count the number of mines around the cells
@@ -91,20 +91,31 @@ function checkForWin() {
 //
 // It will return cells objects in an array. You should loop through 
 // them, counting the number of times `cells.isMine` is true.
-function countSurroundingMines(cells) {
 
+function countSurroundingMines(cells) {
   var surrounding = lib.getSurroundingCells(cells.row, cells.col)
   var count = 0;
 
   for (let i = 0; i < surrounding.length; i++) {
-
     if (surrounding[i].isMine == true) {
-
       count++;
-
     };
-
   }
   return count
 }
 
+function gameStatus() {
+  if (document.getElementById("message").getElementsByTagName('p')[0].innerText == "Let's play!") {
+    document.getElementById("resetti").style.visibility = "hidden";
+  } else if (document.getElementById("message").getElementsByTagName('p')[0].innerText != "Let's play!") {
+    document.getElementById("resetti").style.visibility = "visible";
+  }
+}
+
+function resetBoard() {
+  var elements = document.getElementsByClassName('board');
+  for (let i = 0; i < elements.length; i++) {
+    elements[i].innerHTML = '';
+  }
+  startGame();
+}
